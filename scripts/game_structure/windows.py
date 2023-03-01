@@ -22,7 +22,10 @@ class SaveCheck(UIWindow):
                          window_display_title='Save Check',
                          object_id='#save_check_window',
                          resizable=False)
-        self.clan_name = str(game.clan.name + 'Clan')
+
+        self.clan_name = "UndefinedClan"
+        if game.clan:
+            self.clan_name = f"{game.clan.name}Clan"
         self.last_screen = last_screen
         self.isMainMenu = isMainMenu
         self.mm_btn = mm_btn
@@ -91,7 +94,7 @@ class SaveCheck(UIWindow):
                     self.kill()
                 else:
                     game.is_close_menu_open = False
-                    game.rpc.close()
+                    #game.rpc.close()
                     pygame.display.quit()
                     pygame.quit()
                     exit()
@@ -176,7 +179,10 @@ class DeleteCheck(UIWindow):
                 
                 if data[-1].endswith("\n"):
                     data[-1] = data[-1][:-1] #remove the last \n
-                
+
+                # Remove from the list in memory
+                game.switches['clan_list'] = data
+
                 #write the file
                 with open("saves/clanlist.txt", "w") as clanfile:
                     clanfile.writelines(data)
